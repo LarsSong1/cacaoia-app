@@ -1,0 +1,81 @@
+{% load static %}
+{% load tailwind_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post</title>
+    {% include "components/tailwind.html" %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body class="h-screen">
+    {% include "components/header.html" %}
+
+    <main class="h-[calc(100vh-120px)] w-full absolute top-14">
+
+        {% include "components/aside.html" %}
+        <section id="content"
+            class="w-[100wh-60px] lg:w-[100wh-250px] ml-[60px] lg:ml-[240px] p-5 right-0 transition-all duration-500 ease-in-out">
+            <div class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white antialiased">
+
+                <div class="flex justify-between px-4 mx-auto max-w-screen-xl">
+                    <article class="mx-auto w-full break-words  format format-sm sm:format-base lg:format-lg format-blue relative">
+                        {% if user.is_superuser  %}
+                        <div class="relative lg:absolute right-0 top-0">
+                            {% include "components/btnsPostF.html" %}
+                        </div>
+                        {% endif %}
+                        <header class="mb-4 lg:mb-6 not-format">
+                            <address class="flex items-center mb-6 not-italic">
+                                <div class="inline-flex items-center mr-3 text-sm text-gray-900 ">
+                                    <img class="mr-4 w-16 h-16 rounded-full" src="{% static "img/doodle2.png" %}" alt="Jese Leos">
+                                    <div class="md:overflow-hidden overflow-x-scroll">
+                                        <p  class="text-xl font-bold text-gray-900 ">{{post.user_id | title}}</p>
+                                        {% if post.user_id.is_superuser %}
+                                        <p class="text-base text-gray-500 ">Admin de Plataforma</p>
+                                        
+                                        {% endif %}
+                                        <p class="text-base text-gray-500 "><time pubdate datetime="2022-02-08" title="February 8th, 2022">{{post.date}}</time></p>
+                                    </div>
+                                </div>
+                            </address>
+                            <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl ">{{post.title}}</h1>
+                        </header>
+                        <div class="">{{ post.description|safe }}</div>
+                        <figure class="mt-4 mb-4"><img class="rounded-md mx-auto" src="{{post.image.url}}" alt="img-planta">
+                            <figcaption class="text-center mt-2">Imagen Cargada por:  <p class="font-bold">{{post.user_id | title}}</p></figcaption>
+                        </figure>
+                        <h1 class=" text-3xl font-extrabold leading-tight text-gray-900 lg:text-4xl">Beneficios del Fertilizante</h1>
+                        <h3 class="mb-4 lg:mb-6 font-bold">Fertilizate recomendado:
+                            <p class="font-semibold">{{post.recomendation}}</p>
+                        </h3>
+                        <div>{{ post.benefits |safe }}</div>
+                        
+
+                        <div class="w-full flex justify-center mt-4">
+                            {% include "components/btnComprar.html" %}
+                        </div>
+                            
+                </article>
+            </div>
+        </section>
+                  
+    </main>
+  
+  
+
+      
+
+    </main>
+
+
+    {% include "components/dashscripts.html" %}
+</body>
+</html>

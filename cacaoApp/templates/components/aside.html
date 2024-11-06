@@ -1,0 +1,48 @@
+{% load static %}
+{% load tailwind_filters %}
+
+{% block aside %}
+
+    <aside id="sidebar"
+            class="w-[60px] lg:w-[240px] h-[calc(100vh-120px)] whitespace-nowrap fixed shadow overflow-x-hidden transition-all duration-500 ease-in-out z-20">
+            <div class="flex flex-col justify-between h-full">
+                <ul class="flex flex-col gap-1 mt-2">
+                    <li class="text-gray-500 hover:bg-gray-100 hover:text-gray-900">
+                        <a href={% url "home-view" %} class="w-full flex items-center py-3" href="#">
+                            <i class="fa-solid fa-house text-center text-[#401409]  px-5"></i>
+                            <span class="whitespace-nowrap pl-1">Dashboard</span>
+                        </a>
+                    </li>
+                    {% comment %} <li class="text-gray-500 hover:bg-gray-100 hover:text-gray-900">
+                        <a href={% url "detect-humidity" %} class="w-full flex items-center py-3" href="#">
+                            <i class="fa-solid fa-droplet text-center text-[#401409]  px-5"></i>
+                            <span class="whitespace-nowrap pl-2">Detectar Humedad</span>
+                        </a>
+                    </li> {% endcomment %}
+
+                    <li class="text-gray-500 hover:bg-gray-100 hover:text-gray-900">
+                        <a href={% url "upload-image" %} class="w-full flex items-center py-3" href="#">
+                            <i class="fa-solid fa-image text-center text-[#401409]  px-5"></i>
+                            <span class="whitespace-nowrap pl-1">Capturar Imágenes</span>
+                        </a>
+                    </li>
+
+                    <li class="text-gray-500 hover:bg-gray-100 hover:text-gray-900">
+                        <a class="w-full flex items-center py-3" href="{% url "fertilizers" %}">
+                            <i class="fa-solid fa-seedling text-center text-[#401409]  px-5"></i>
+                            <span class="whitespace-nowrap pl-1">Fertilizantes</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="flex flex-col gap-1 mt-2">
+                    <li class="text-gray-500 hover:bg-gray-100 hover:text-gray-900">
+                        <a class="w-full flex items-center py-3" href="{% url "logout" %}">
+                            <i class="fa-solid fa-right-from-bracket text-center text-[#401409]  px-5"></i>
+                            <span class="pl-1">Salir</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+{% endblock aside %}

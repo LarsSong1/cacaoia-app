@@ -1,0 +1,84 @@
+.bg-cacao {
+    position: absolute;
+    background-repeat: no-repeat;
+    left: -7%;
+    bottom: -30%;
+    
+    
+}
+
+.bg-cacao img {
+    width: 1000px;
+    height: 1000px;
+    transition: transform 0.5s ease-in-out 0.5s;
+}
+
+.bg-cacao img:hover {
+    transform: scale(1.2); 
+}
+
+
+
+.container-doodle {
+    position: absolute;
+    animation-name: animate-doodle;
+    right: -8%;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    
+}
+
+.container-doodle img {
+    width: 400px;
+    height: 400px;
+    transform: rotate(-50deg);
+}
+
+@keyframes animate-doodle {
+    0% {
+        right: -20%;
+    }
+    50% {
+        right: -8%;
+    }
+    100%{
+        right: -20%;
+    }
+}
+
+
+
+
+@media screen and (max-width: 1068px) {
+    
+    .container-doodle img {
+        width: 200px;
+        height: 200px;
+        transform: rotate(-50deg);
+    }
+
+    .container-doodle {
+        position: absolute;
+        animation-name: animate-doodle;
+        right: -10%;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+        
+    }
+
+    @keyframes animate-doodle {
+        0% {
+            right: -20%;
+        }
+        50% {
+            right: -8%;
+        }
+        100%{
+            right: -20%;
+        }
+    }
+    
+    
+}
+
+

@@ -1,0 +1,43 @@
+.container-doodle {
+    top: 5%;
+    left: -15%;
+    animation-name: container-doodle;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+}
+
+.doodle {
+    animation-duration: 5s;
+    animation-name: doodle;
+    animation-iteration-count: infinite;
+
+}
+
+
+@keyframes doodle {
+    0% {
+        transform: rotate(0deg);
+        
+    }
+    50%{
+        transform: rotate(45deg);
+    }
+    100%{
+        transform: rotate(0deg);
+      
+    }
+    
+}
+
+
+@keyframes container-doodle {
+    0%{
+        left: -30%;
+    }
+    50%{
+        left: -10%;
+    }
+    100%{
+        left: -30%;
+    }
+}

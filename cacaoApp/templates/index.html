@@ -1,0 +1,491 @@
+{% load static %}
+
+<!-- component -->
+<!DOCTYPE html>
+<html class="dark scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/dist/output.css" rel="stylesheet" />
+    <title>Inicio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    {% include "components/tailwind.html" %}
+
+</head>
+
+<body class="h-screen">
+
+    {% include "components/header.html" %}
+
+    <!-- main content -->
+    <main class="h-[calc(100vh-120px)] w-full absolute top-14">
+        <!-- left sidebar -->
+        {% include "components/aside.html" %}
+
+        <!-- main content -->
+        <section id="content"
+            class="w-[100wh-60px] lg:w-[100wh-250px] ml-[60px] lg:ml-[240px] p-5 right-0 transition-all duration-500 ease-in-out">
+            <!-- user summary -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="bg-slate-50 p-5 m-2 rounded-md flex justify-between items-center shadow">
+                    <div>
+                        <h3 class="font-bold">Usarios Registrados</h3>
+                        <p class="text-gray-500">{{ numberusers }}</p>
+                    </div>
+                    <i class="fa-solid fa-users p-4 bg-gray-200 rounded-md"></i>
+                </div>
+
+                <div class="bg-slate-50 p-5 m-2 flex justify-between items-center shadow">
+                    <div>
+                        <h3 class="font-bold">Mazorcas en Buen Estado</h3>
+                        <p class="text-gray-500">{{healthyDetects}}</p>
+                    </div>
+                    <i class="fa-solid fa-plant-wilt p-4 bg-green-200 rounded-md"></i>
+                </div>
+
+                <div class="bg-slate-50 p-5 m-2 flex justify-between items-center shadow">
+                    <div>
+                        <h3 class="font-bold">Mazorcas Con Monilia</h3>
+                        <p class="text-gray-500">{{moniliaDetects}}</p>
+                    </div>
+                    <i class="fa-solid fa-plant-wilt p-4 bg-yellow-200 rounded-md"></i>
+                </div>
+
+                <div class="bg-slate-50 p-5 m-2 flex justify-between items-center shadow">
+                    <div>
+                        <h3 class="font-bold">Mazorcas con Fitophthora</h3>
+                        <p class="text-gray-500">{{pythoDetects}}</p>
+                    </div>
+                    <i class="fa-solid fa-plant-wilt p-4 bg-red-200 rounded-md"></i>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
+                <!-- chart  -->
+                {% comment %} <div class="m-2 shadow-md">
+                    <h2 class="text-xl p-2">Gráfico de Barras</h2>
+                    <div id="chart" class="w-full "></div>
+                </div> {% endcomment %}
+                {% include "components/barchart.html" %}
+                <!-- //user list -->
+                <div class="overflow-x-auto overflow-y-auto m-2 shadow-md">
+                    <table class="w-full">
+                        <thead class="bg-gray-100 rounded-sm">
+                            <tr>
+                                <th class="text-left">Avatar</th>
+                                <th class="text-left">User Name</th>
+                                <th class="text-left">Mazorcas Analizadas</th>
+                              
+                                <th class="text-left">Estado</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        
+                        {% for appuser in usersapp %}
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white"
+                                        src="{% static "img/doodle2.png" %}"
+                                        alt="">
+                                </td>
+                                <td>{{ appuser.username }}</td>
+                                <td class="lg:ps-20 ps-10 ">{{appuser.total_pods}}</td>
+                            
+                                {% if appuser.is_superuser %}
+                                    <td><span
+                                        class="bg-green-50 text-green-700 px-3 py-1 ring-1 ring-green-200 text-xs rounded-md">Admin</span>
+                                    </td>
+                                
+                                {% else %}
+                                    <td><span
+                                        class="bg-green-50 text-green-700 px-3 py-1 ring-1 ring-green-200 text-xs rounded-md">Worker</span>
+                                    </td>
+                                {% endif %}
+                                <td>
+                                    <div class="flex justify-between gap-1">
+                                        {% comment %} <i title="Edit"
+                                            class="fa-solid fa-pencil p-1 text-green-500 rounded-full cursor-pointer"></i> {% endcomment %}
+                                        <a href="{% url "user-profile" appuser.id %}">
+
+                                            <i title="View"
+                                            class="fa-solid fa-eye p-1 text-violet-500 rounded-full cursor-pointer">
+                                            </i>
+                                        </a>
+
+                                        {% if user.is_authenticated and user.is_superuser %}
+                                        
+                                        <form action="{% url "delete-user" appuser.id %}" method="post">
+                                            {% csrf_token %}
+                                            <button type="submit">
+                                                <i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i>
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+
+                          
+                        
+                        </tbody>
+                        {% endfor %}
+                        
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                <!-- chart  -->
+            
+                <div class="shadow-lg rounded-lg overflow-hidden">
+                    <div class="py-3 px-5 bg-gray-50">Pie chart</div>
+                    <canvas class="p-1 ml-40 mr-40" id="chartPie"></canvas>
+                </div>
+                {% include "components/cardchart.html" %}
+
+        
+            </div>
+
+             
+        </section>
+    </main>
+
+    <footer class="bg-gray-50 p-5 bottom-0 fixed w-full">
+        <p class="text-center">Desarrollada por Jair, Landivar, Sindy y Bryan</p>
+    </footer>
+
+    <script>
+        function collapseSidebar() {
+            let sidebar = document.getElementById('sidebar')
+            let content = document.getElementById('content')
+            let toggle = document.getElementById('toggle-button')
+            let titles = sidebar.querySelectorAll('span')
+
+            if (sidebar.classList.contains('lg:w-[240px]')) {
+                //sidebar
+                sidebar.classList.remove('lg:w-[240px]')
+                sidebar.classList.add('w-[60px]')
+
+                //content
+                content.classList.remove('lg:w-[100wh-250px]')
+                content.classList.remove('lg:ml-[240px]')
+                content.classList.add('lg:w-[100wh-100px]')
+                content.classList.add('ml-[60px]')
+
+                //toggle
+                toggle.classList.remove('rotate-0')
+                toggle.classList.add('rotate-180')
+            } else {
+                //sidebar
+                sidebar.classList.remove('w-[60px]')
+                sidebar.classList.add('lg:w-[240px]')
+
+                //content
+                content.classList.remove('lg:w-[100wh-100px]')
+                content.classList.remove('ml-[60px]')
+                content.classList.add('lg:w-[100wh-250px]')
+                content.classList.add('lg:ml-[240px]')
+
+                //toggle
+                toggle.classList.remove('rotate-180')
+                toggle.classList.add('rotate-0')
+            }
+        }
+
+        // toggle user dropdown
+        function openUserDropdown() {
+            document.getElementById('user-dropdown').classList.toggle('hidden')
+        }
+    </script>
+
+    {% comment %} <script>
+        var options = {
+            chart: {
+                height: 350,
+                type: "line",
+                stacked: false
+            },
+            dataLabels: {
+                enabled: false
+            },
+            colors: ["#FF1654", "#247BA0"],
+            series: [
+                {
+                    name: "Buen Estado",
+                    data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
+                },
+                {
+                    name: "Monilia",
+                    data: [20, 29, 37, 36, 44, 45, 50, 58]
+                }
+            ],
+            stroke: {
+                width: [4, 4]
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: "20%"
+                }
+            },
+            xaxis: {
+                categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]
+            },
+            yaxis: [
+                {
+                    axisTicks: {
+                        show: true
+                    },
+                    axisBorder: {
+                        show: true,
+                        color: "#FF1654"
+                    },
+                    labels: {
+                        style: {
+                            colors: "#FF1654"
+                        }
+                    },
+                    title: {
+                        text: "Series A",
+                        style: {
+                            color: "#FF1654"
+                        }
+                    }
+                },
+                {
+                    opposite: true,
+                    axisTicks: {
+                        show: true
+                    },
+                    axisBorder: {
+                        show: true,
+                        color: "#247BA0"
+                    },
+                    labels: {
+                        style: {
+                            colors: "#247BA0"
+                        }
+                    },
+                    title: {
+                        text: "Series B",
+                        style: {
+                            color: "#247BA0"
+                        }
+                    }
+                }
+            ],
+            tooltip: {
+                shared: false,
+                intersect: true,
+                x: {
+                    show: false
+                }
+            },
+            legend: {
+                horizontalAlign: "left",
+                offsetX: 40
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+
+        chart.render();
+    </script> {% endcomment %}
+
+
+
+
+    <!-- pie chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const dataPie = {
+          labels: ["Saludables", "Monilia", "Pythophthora"],
+          datasets: [
+            {
+              label: "My First Dataset",
+              data: [{{healthyDetects}}, {{moniliaDetects}}, {{pythoDetects}}],
+              backgroundColor: [
+                "#49BD67",
+                "#E5E43C",
+                "#943737",
+              ],
+              hoverOffset: 4,
+            },
+          ],
+        };
+      
+        const configPie = {
+          type: "pie",
+          data: dataPie,
+          options: {},
+        };
+      
+        var chartBar = new Chart(document.getElementById("chartPie"), configPie);
+    </script>
+
+    <!-- Graph Bar -->
+    <script>
+        function app() {
+          return {
+            chartData: [{{healthyDetects}}, {{moniliaDetects}}, {{pythoDetects}}],
+            labels: ['Saludable', 'Monilia', 'Pythophthora'],
+    
+            tooltipContent: '',
+            tooltipOpen: false,
+            tooltipX: 0,
+            tooltipY: 0,
+            showTooltip(e) {
+              console.log(e);
+              this.tooltipContent = e.target.textContent
+              this.tooltipX = e.target.offsetLeft - e.target.clientWidth;
+              this.tooltipY = e.target.clientHeight + e.target.clientWidth;
+            },
+            hideTooltip(e) {
+              this.tooltipContent = '';
+              this.tooltipOpen = false;
+              this.tooltipX = 0;
+              this.tooltipY = 0;
+            }
+          }
+        }
+    </script>
+
+    <!-- Card Chart -->
+    <script>
+       
+        const getChartOptions = () => {
+            return {
+            series: [{{healthyDetects}}, {{moniliaDetects}}, {{pythoDetects}}],
+            colors: ["#49BD67", "#E5E43C",  "#943737"],
+            chart: {
+                height: 320,
+                width: "100%",
+                type: "donut",
+            },
+            stroke: {
+                colors: ["transparent"],
+                lineCap: "",
+            },
+            plotOptions: {
+                pie: {
+                donut: {
+                    labels: {
+                    show: true,
+                    name: {
+                        show: true,
+                        fontFamily: "Inter, sans-serif",
+                        offsetY: 20,
+                    },
+                    total: {
+                        showAlways: true,
+                        show: true,
+                        label: "Mazorcas",
+                        fontFamily: "Inter, sans-serif",
+                        formatter: function (w) {
+                        const sum = w.globals.seriesTotals.reduce((a, b) => {
+                            return a + b
+                        }, 0)
+                        return '{{totalMaz}}'
+                        },
+                    },
+                    value: {
+                        show: true,
+                        fontFamily: "Inter, sans-serif",
+                        offsetY: -20,
+                        formatter: function (value) {
+                        return value + "k"
+                        },
+                    },
+                    },
+                    size: "80%",
+                },
+                },
+            },
+            grid: {
+                padding: {
+                top: -2,
+                },
+            },
+            labels: ["Saludable", "Monilia", "Pythophthora"],
+            dataLabels: {
+                enabled: false,
+            },
+            legend: {
+                position: "bottom",
+                fontFamily: "Inter, sans-serif",
+                fontSize: '14px'
+            },
+            yaxis: {
+                labels: {
+                formatter: function (value) {
+                    return value + "k"
+                },
+                },
+            },
+            xaxis: {
+                labels: {
+                formatter: function (value) {
+                    return value  + "k"
+                },
+                },
+                axisTicks: {
+                show: false,
+                },
+                axisBorder: {
+                show: false,
+                },
+            },
+            }
+        }
+        
+        if (document.getElementById("donut-chart") && typeof ApexCharts !== 'undefined') {
+            const chart = new ApexCharts(document.getElementById("donut-chart"), getChartOptions());
+            chart.render();
+        
+            // Get all the checkboxes by their class name
+            const checkboxes = document.querySelectorAll('#devices input[type="checkbox"]');
+        
+            // Function to handle the checkbox change event
+            function handleCheckboxChange(event, chart) {
+                const checkbox = event.target;
+                if (checkbox.checked) {
+                    switch(checkbox.value) {
+                    case 'desktop':
+                        chart.updateSeries([15.1, 22.5, 4.4, 8.4]);
+                        break;
+                    case 'tablet':
+                        chart.updateSeries([25.1, 26.5, 1.4, 3.4]);
+                        break;
+                    case 'mobile':
+                        chart.updateSeries([45.1, 27.5, 8.4, 2.4]);
+                        break;
+                    default:
+                        chart.updateSeries([55.1, 28.5, 1.4, 5.4]);
+                    }
+        
+                } else {
+                    chart.updateSeries([35.1, 23.5, 2.4, 5.4]);
+                }
+            }
+        
+            // Attach the event listener to each checkbox
+            checkboxes.forEach((checkbox) => {
+                checkbox.addEventListener('change', (event) => handleCheckboxChange(event, chart));
+            });
+        }
+  
+    </script>
+
+
+
+</body>
+
+</html>

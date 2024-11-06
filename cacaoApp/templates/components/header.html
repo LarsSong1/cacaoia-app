@@ -1,0 +1,51 @@
+{% load static %}
+{% load tailwind_filters %}
+
+
+{% block header %}
+
+
+
+    <header class="h-14 bg-gray-100 top-0 w-full fixed shadow" style="z-index: 99999;">
+        <div class="flex justify-between items-center px-10 h-14">
+            <a href="{% url "home-view" %}" class="flex justify-between relative items-center gap-x-14">
+                <img class="w-8 h-8" src="{% static "img/cocoalogo.png" %}" alt="logo-app">
+                <div class="w-40">
+                    
+                    <h2 class="text-md font-bold">Cacao Pod</h2>
+                    <p class="text-gray-400 text-[12px]">
+                        SaaS
+                    </p>
+                </div>
+                <a id="toggle-button" class="hidden absolute left-72 lg:block bg-gray-200 rounded-full transition-all  duration-500 ease-in-out"
+                    onclick="collapseSidebar()" href="#"><i class="fa-solid fa-arrow-left p-3"></i></a>
+                </a>
+    
+    
+            <ul class="flex items-center gap-5">
+               
+                </li>
+                <li class="flex" onclick="openUserDropdown()">
+                    <p class="font-bold pe-4 lg:block hidden">{{ current_user | title }}</p>
+                    <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white cursor-pointer"
+                        src="{% static "img/doodle2.png" %}"
+                        alt="">
+                    <ul id="user-dropdown" class="absolute hidden bg-white right-4 top-14 w-28 rounded shadow-md">
+                        <li class="mb-1 hover:bg-gray-50 text-gray-700 hover:text-gray-900"><a class="block px-5 py-2"
+                                href="{% url 'user-profile' user.id %}">Perfil</a></li>
+                        <li class="mb-1 hover:bg-gray-50 text-gray-700 hover:text-gray-900">
+                            <form action="{% url "logout" %}" method="post">
+                                {% csrf_token %}
+                                <button class="block px-5 py-2" type="submit">Salir</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </header>
+        
+
+
+
+{% endblock header %}
